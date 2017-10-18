@@ -1,5 +1,4 @@
-var
-  path = require('path'),
+var path = require('path'),
   config = require('../config'),
   cssUtils = require('./css-utils'),
   webpack = require('webpack'),
@@ -10,7 +9,9 @@ var
   OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin'),
   CopyWebpackPlugin = require('copy-webpack-plugin'),
   SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin'),
-  fsUtils = require('./fs-utils')
+  fsUtils = require('./fs-utils'),
+  PrerenderSpaPlugin = require('prerender-spa-plugin'),
+  CompressionPlugin = require('compression-webpack-plugin')
 
 module.exports = merge(baseWebpackConfig, {
   module: {
@@ -40,6 +41,13 @@ module.exports = merge(baseWebpackConfig, {
     new ExtractTextPlugin({
       filename: '[name].[contenthash].css'
     }),
+    // compress all text content file
+    new CompressionPlugin({
+      test: /\.(js|css|json|html)$/,
+      asset: '[path].gz[query]',
+      deleteOriginalAssets: true,
+      algorithm: 'gzip'
+    }),
     new HtmlWebpackPlugin({
       filename: path.resolve(__dirname, '../dist/index.html'),
       template: 'src/index.html',
@@ -53,23 +61,21 @@ module.exports = merge(baseWebpackConfig, {
       },
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency',
-      serviceWorkerLoader: `<script>${fsUtils.loadMinified(path.join(__dirname,
-        './service-worker-prod.js'))}</script>`
+      serviceWorkerLoader: `<script>${fsUtils.loadMinified(
+        path.join(__dirname, './service-worker-prod.js')
+      )}</script>`
     }),
     // split vendor js into its own file
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
-      minChunks: function (module, count) {
+      minChunks: function(module, count) {
         // any required modules inside node_modules are extracted to vendor
         return (
           module.resource &&
           /\.js$/.test(module.resource) &&
-          (
-            module.resource.indexOf('quasar') > -1 ||
-            module.resource.indexOf(
-              path.join(__dirname, '../node_modules')
-            ) === 0
-          )
+          (module.resource.indexOf('quasar') > -1 ||
+            module.resource.indexOf(path.join(__dirname, '../node_modules')) ===
+              0)
         )
       }
     }),
@@ -91,9 +97,17 @@ module.exports = merge(baseWebpackConfig, {
     new SWPrecacheWebpackPlugin({
       cacheId: 'my-quasar-app',
       filename: 'service-worker.js',
-      staticFileGlobs: ['dist/**/*.{js,html,css,woff,ttf,eof,woff2,json,svg,gif,jpg,png,mp3}'],
+      staticFileGlobs: [
+        'dist/**/*.{js,html,css,woff,ttf,eof,woff2,json,svg,gif,jpg,png,mp3}'
+      ],
       minify: true,
       stripPrefix: 'dist/'
-    })
+    }),
+    new PrerenderSpaPlugin(
+      // Absolute path to compiled SPA
+      path.join(__dirname, '../dist'),
+      // List of routes to prerender
+      ['/']
+    )
   ]
 })

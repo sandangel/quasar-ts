@@ -8,7 +8,9 @@
     "dev": "node build/script.dev.js",
     "build": "node build/script.build.js",
     "lint": "eslint --ext .js,.vue src",
-    "serve:prod": "lite-server"
+    "serve": "node build/server.js",
+    "lite": "lite-server",
+    "serve:prod": "yarn build && yarn serve"
   },
   "dependencies": {
     "@types/node": "^8.0.44",
@@ -27,6 +29,7 @@
     "babel-preset-es2015": "^6.0.0",
     "babel-preset-stage-2": "^6.0.0",
     "colors": "^1.1.2",
+    "compression-webpack-plugin": "^1.0.1",
     "connect-history-api-fallback": "^1.1.0",
     "copy-webpack-plugin": "^4.1.0",
     "css-loader": "^0.28.7",
@@ -42,6 +45,7 @@
     "eslint-plugin-standard": "^3.0.1",
     "eventsource-polyfill": "^0.9.6",
     "express": "^4.16.1",
+    "express-static-gzip": "^0.3.0",
     "extract-text-webpack-plugin": "^3.0.0",
     "file-loader": "^1.1.5",
     "friendly-errors-webpack-plugin": "^1.1.3",
@@ -49,10 +53,10 @@
     "html-webpack-plugin": "^2.30.1",
     "http-proxy-middleware": "^0.17.0",
     "json-loader": "^0.5.7",
-    "lite-server": "^2.3.0",
     "opn": "^5.0.0",
     "optimize-css-assets-webpack-plugin": "^3.2.0",
     "postcss-loader": "^2.0.8",
+    "prerender-spa-plugin": "^2.1.0",
     "progress-bar-webpack-plugin": "^1.10.0",
     "purify-css": "^1.2.5",
     "shelljs": "^0.7.0",
