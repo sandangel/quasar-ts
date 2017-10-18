@@ -1,12 +1,12 @@
-# Quasar PWA App
+# Quasar PWA App with Typescipt support
 
-> A Quasar PWA project
+> Develope Quasar PWA App with typescript
 
 ## Build Setup
 
 ``` bash
 # install dependencies
-$ npm install
+$ yarn
 
 # serve with hot reload at localhost:8081
 $ quasar dev
@@ -16,4 +16,7 @@ $ quasar build
 
 # lint code
 $ quasar lint
+
+# serve from disk
+$ yarn serve:prod
 ```
