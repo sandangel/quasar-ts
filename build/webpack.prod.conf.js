@@ -11,7 +11,8 @@ var path = require('path'),
   SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin'),
   fsUtils = require('./fs-utils'),
   PrerenderSpaPlugin = require('prerender-spa-plugin'),
-  CompressionPlugin = require('compression-webpack-plugin')
+  CompressionPlugin = require('compression-webpack-plugin'),
+  PreloadWebpackPlugin = require('preload-webpack-plugin')
 
 module.exports = merge(baseWebpackConfig, {
   module: {
@@ -41,13 +42,6 @@ module.exports = merge(baseWebpackConfig, {
     new ExtractTextPlugin({
       filename: '[name].[contenthash].css'
     }),
-    // compress all text content file
-    new CompressionPlugin({
-      test: /\.(js|css|json|html)$/,
-      asset: '[path].gz[query]',
-      deleteOriginalAssets: true,
-      algorithm: 'gzip'
-    }),
     new HtmlWebpackPlugin({
       filename: path.resolve(__dirname, '../dist/index.html'),
       template: 'src/index.html',
@@ -65,6 +59,7 @@ module.exports = merge(baseWebpackConfig, {
         path.join(__dirname, './service-worker-prod.js')
       )}</script>`
     }),
+    new PreloadWebpackPlugin(),
     // split vendor js into its own file
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
@@ -108,6 +103,13 @@ module.exports = merge(baseWebpackConfig, {
       path.join(__dirname, '../dist'),
       // List of routes to prerender
       ['/']
-    )
+    ),
+    // compress all text content file
+    new CompressionPlugin({
+      test: /\.(js|css|json|html)$/,
+      asset: '[path].gz[query]',
+      deleteOriginalAssets: true,
+      algorithm: 'gzip'
+    })
   ]
 })

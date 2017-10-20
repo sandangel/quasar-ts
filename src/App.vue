@@ -5,6 +5,7 @@
     <main>
       <img src="~assets/quasar-logo-full.svg"
            alt="Quasar PWA">
+           <br><br>
       <router-view></router-view>
     </main>
   </div>
@@ -15,12 +16,10 @@
  * Root component
  */
 import Vue from 'vue'
-import { Component } from 'vue-property-decorator'
+import {Component} from 'vue-property-decorator'
 
 @Component
-export default class App extends Vue {
-
-}
+export default class App extends Vue {}
 </script>
 
 <style lang="stylus">

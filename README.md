@@ -1,6 +1,16 @@
 # Quasar PWA App with Typescipt support
 
-> Develope Quasar PWA App with Typescript with webpack auto compress to gzip and Lighthouse > 90%
+> Develope Quasar PWA App with Typescript with webpack auto compress to gzip and Lighthouse score > 90%
+
+## Webpack plugin:
+This repo is base on quasar init pwa template plus some webpack plugins:
+
+1/ prerender-spa-plugin
+2/ compression-webpack-plugin
+3/ preload-webpack-plugin
+
+## Dev server
+There is a dev server in build/server.js which is configured to serve gzip file for testing with Lighthouse.
 
 ## Build Setup
 
