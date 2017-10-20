@@ -27,6 +27,10 @@ import 'quasar-extras/fontawesome'
 
 import App from './App.vue'
 
+import HTTP from './http'
+
+Vue.use(HTTP)
+
 /* eslint-disable no-new */
 new Vue({
   el: '#q-app',
